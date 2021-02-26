@@ -26,7 +26,7 @@ namespace IdolCardAPI.Controllers
             // Declare variables for query
             string query = @"SELECT GroupId, GroupName from dbo.IdolGroup";
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("IdolAppConn");
+            string sqlDataSource = @"Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = CardDb; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
             SqlDataReader myReader;
 
             using(SqlConnection myCon = new SqlConnection(sqlDataSource))
