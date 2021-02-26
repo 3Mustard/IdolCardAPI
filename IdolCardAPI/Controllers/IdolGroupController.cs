@@ -7,7 +7,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
+using IdolCardAPI.Models;
 
+
+// ** REPLACE ALL QUERIES WITH ENTITY/STORED PROCEDURES. REMOVE DATA SOURCE STRING TO THE APPSETTINGS.JSON FILE **
 namespace IdolCardAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -23,7 +26,6 @@ namespace IdolCardAPI.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            // Declare variables for query
             string query = @"SELECT GroupId, GroupName from dbo.IdolGroup";
             DataTable table = new DataTable();
             string sqlDataSource = @"Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = CardDb; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
@@ -43,6 +45,30 @@ namespace IdolCardAPI.Controllers
             }
 
             return new JsonResult(table);
+        }
+
+        [HttpPost]
+        public JsonResult Post(IdolGroup ig)
+        {
+            string query = @"insert into dbo.Department values ('" + ig.GroupName + @"')";
+            DataTable table = new DataTable();
+            string sqlDataSource = @"Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = CardDb; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
+            SqlDataReader myReader;
+
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Idol Group POST success!");
         }
     }
 }
