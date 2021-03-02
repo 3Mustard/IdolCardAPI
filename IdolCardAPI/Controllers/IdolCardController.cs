@@ -40,5 +40,53 @@ namespace IdolCardAPI.Controllers
 
             return new JsonResult(table);
         }
+
+        [HttpPost]
+        public JsonResult Post(IdolCard idolCard)
+        {
+            string query = $"insert into dbo.IdolGroup (IdolName, IdolGroup, PhotoCardSet, DateAdded, PhotoFileName) values ('{idolCard.IdolName}', '{idolCard.IdolGroup}', '{idolCard.PhotoCardSet}', '{idolCard.DateAdded}', '{idolCard.PhotoFileName}')";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
+            SqlDataReader myReader;
+
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Idol Card POST success!");
+        }
+
+        [HttpPut]
+        public JsonResult Put(IdolCard idolCard)
+        {
+            string query = $"update dbo.IdolGroup set IdolName = {idolCard.IdolName}, IdolGroup = {idolCard.IdolGroup}, PhotoCardSet = {idolCard.PhotoCardSet}, DateAdded = {idolCard.DateAdded}, PhotoFileName = {idolCard.PhotoFileName} where GroupId = {idolCard.IdolId}";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
+            SqlDataReader myReader;
+
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Idol Card UPDATE success!");
+        }
     }
 }
