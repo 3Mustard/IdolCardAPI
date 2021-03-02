@@ -26,7 +26,7 @@ namespace IdolCardAPI.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            string query = @"SELECT GroupId, GroupName from dbo.IdolGroup";
+            string query = "SELECT GroupId, GroupName from dbo.IdolGroup";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
             SqlDataReader myReader;
@@ -50,7 +50,7 @@ namespace IdolCardAPI.Controllers
         [HttpPost]
         public JsonResult Post(IdolGroup ig)
         {
-            string query = @"insert into dbo.Department values ('" + ig.GroupName + @"')";
+            string query = $"insert into dbo.IdolGroup values ('{ig.GroupName}')";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
             SqlDataReader myReader;
@@ -69,6 +69,30 @@ namespace IdolCardAPI.Controllers
             }
 
             return new JsonResult("Idol Group POST success!");
+        }
+
+        [HttpPut]
+        public JsonResult Put(IdolGroup ig)
+        {
+            string query = $"update dbo.IdolGroup set GroupName = '{ig.GroupName}' where GroupId = {ig.GroupId}";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
+            SqlDataReader myReader;
+
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Idol Group UPDATE success!");
         }
     }
 }
