@@ -1,16 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
 using IdolCardAPI.Models;
 
 
-// ** REPLACE ALL QUERIES WITH ENTITY/STORED PROCEDURES. REMOVE DATA SOURCE STRING TO THE APPSETTINGS.JSON FILE **
+// ** REPLACE ALL QUERIES WITH ENTITY/STORED PROCEDURES. **
 namespace IdolCardAPI.Controllers
 {
     [Route("api/[controller]")]
