@@ -31,10 +31,10 @@ namespace IdolCardAPI.Controllers
             string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
             SqlDataReader myReader;
 
-            using(SqlConnection myCon = new SqlConnection(sqlDataSource))
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
                 myCon.Open();
-                using(SqlCommand myCommand = new SqlCommand(query, myCon))
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
@@ -93,6 +93,30 @@ namespace IdolCardAPI.Controllers
             }
 
             return new JsonResult("Idol Group UPDATE success!");
+        }
+
+        [HttpDelete("{id}")]
+        public JsonResult Delete(int id)
+        {
+            string query = $"delete from dbo.IdolGroup where GroupId = {id}";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
+            SqlDataReader myReader;
+
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Idol Group DELETE success!");
         }
     }
 }
