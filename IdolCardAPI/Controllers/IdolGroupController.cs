@@ -5,7 +5,6 @@ using System.Data;
 using IdolCardAPI.Models;
 
 
-// ** REPLACE ALL QUERIES WITH ENTITY/STORED PROCEDURES. **
 namespace IdolCardAPI.Controllers
 {
     [Route("api/[controller]")]

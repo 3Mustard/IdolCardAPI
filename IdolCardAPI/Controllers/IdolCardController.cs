@@ -4,10 +4,9 @@ using System.Data.SqlClient;
 using System.Data;
 using IdolCardAPI.Models;
 
-// ** REPLACE ALL QUERIES WITH ENTITY/STORED PROCEDURES. **
 namespace IdolCardAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] // api/IdolCard
     [ApiController]
     public class IdolCardController : ControllerBase
     {
@@ -68,7 +67,7 @@ namespace IdolCardAPI.Controllers
         [HttpPut]
         public JsonResult Put(IdolCard idolCard)
         {
-            string query = $"update dbo.IdolCard set IdolName = @IdolName, IdolGroup = '{idolCard.IdolGroup}', PhotoCardSet = '{idolCard.PhotoCardSet}', DateAdded = '{idolCard.DateAdded}', PhotoFileName = '{idolCard.PhotoFileName}' where IdolId = {idolCard.IdolId}";
+            string query = $"update dbo.IdolCard set IdolName = @IdolName, IdolGroup = @IdolGroup, PhotoCardSet = @PhotoCardSet, DateAdded = @DateAdded, PhotoFileName = @PhotoFileName where IdolId = @IdolId";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
             SqlDataReader myReader;
@@ -85,7 +84,42 @@ namespace IdolCardAPI.Controllers
                     //p1.SqlDbType = SqlDbType.VarChar;
                     p1.Value = idolCard.IdolName;
 
+                    var p2 = myCommand.CreateParameter();
+                    p2.ParameterName = "@IdolGroup";
+                    p2.Direction = ParameterDirection.Input;
+                    p2.DbType = DbType.String;
+                    p2.Value = idolCard.IdolGroup;
+
+                    var p3 = myCommand.CreateParameter();
+                    p3.ParameterName = "@PhotoCardSet";
+                    p3.Direction = ParameterDirection.Input;
+                    p3.DbType = DbType.String;
+                    p3.Value = idolCard.PhotoCardSet;
+
+                    var p4 = myCommand.CreateParameter();
+                    p4.ParameterName = "@DateAdded";
+                    p4.Direction = ParameterDirection.Input;
+                    p4.DbType = DbType.String;
+                    p4.Value = idolCard.DateAdded;
+
+                    var p5 = myCommand.CreateParameter();
+                    p5.ParameterName = "@PhotoFileName";
+                    p5.Direction = ParameterDirection.Input;
+                    p5.DbType = DbType.String;
+                    p5.Value = idolCard.PhotoFileName;
+
+                    var p6 = myCommand.CreateParameter();
+                    p6.ParameterName = "@IdolId";
+                    p6.Direction = ParameterDirection.Input;
+                    p6.DbType = DbType.String;
+                    p6.Value = idolCard.IdolId;
+
                     myCommand.Parameters.Add(p1);
+                    myCommand.Parameters.Add(p2);
+                    myCommand.Parameters.Add(p3);
+                    myCommand.Parameters.Add(p4);
+                    myCommand.Parameters.Add(p5);
+                    myCommand.Parameters.Add(p6);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
 
