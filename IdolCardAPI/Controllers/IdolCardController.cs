@@ -43,7 +43,7 @@ namespace IdolCardAPI.Controllers
         [HttpPost]
         public JsonResult Post(IdolCard idolCard)
         {
-            string query = $"insert into dbo.IdolCard (IdolName, IdolGroup, PhotoCardSet, DateAdded, PhotoFileName) values ('{idolCard.IdolName}', '{idolCard.IdolGroup}', '{idolCard.PhotoCardSet}', '{idolCard.DateAdded}', '{idolCard.PhotoFileName}')";
+            string query = $"insert into dbo.IdolCard (IdolName, IdolGroup, PhotoCardSet, DateAdded, PhotoFileName) values (@IdolName, @IdolGroup, @PhotoCardSet, @DateAdded, @PhotoFileName)";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
             SqlDataReader myReader;
@@ -53,6 +53,41 @@ namespace IdolCardAPI.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
+                    var p1 = myCommand.CreateParameter();
+                    p1.ParameterName = "@IdolName";
+                    p1.Direction = ParameterDirection.Input;
+                    p1.DbType = DbType.String;
+                    p1.Value = idolCard.IdolName;
+
+                    var p2 = myCommand.CreateParameter();
+                    p2.ParameterName = "@IdolGroup";
+                    p2.Direction = ParameterDirection.Input;
+                    p2.DbType = DbType.String;
+                    p2.Value = idolCard.IdolGroup;
+
+                    var p3 = myCommand.CreateParameter();
+                    p3.ParameterName = "@PhotoCardSet";
+                    p3.Direction = ParameterDirection.Input;
+                    p3.DbType = DbType.String;
+                    p3.Value = idolCard.PhotoCardSet;
+
+                    var p4 = myCommand.CreateParameter();
+                    p4.ParameterName = "@DateAdded";
+                    p4.Direction = ParameterDirection.Input;
+                    p4.DbType = DbType.String;
+                    p4.Value = idolCard.DateAdded;
+
+                    var p5 = myCommand.CreateParameter();
+                    p5.ParameterName = "@PhotoFileName";
+                    p5.Direction = ParameterDirection.Input;
+                    p5.DbType = DbType.String;
+                    p5.Value = idolCard.PhotoFileName;
+
+                    myCommand.Parameters.Add(p1);
+                    myCommand.Parameters.Add(p2);
+                    myCommand.Parameters.Add(p3);
+                    myCommand.Parameters.Add(p4);
+                    myCommand.Parameters.Add(p5);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
 
@@ -81,7 +116,6 @@ namespace IdolCardAPI.Controllers
                     p1.ParameterName = "@IdolName";
                     p1.Direction = ParameterDirection.Input;
                     p1.DbType = DbType.String;
-                    //p1.SqlDbType = SqlDbType.VarChar;
                     p1.Value = idolCard.IdolName;
 
                     var p2 = myCommand.CreateParameter();
@@ -134,7 +168,7 @@ namespace IdolCardAPI.Controllers
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
-            string query = $"delete from dbo.IdolCard where IdolId = {id}";
+            string query = $"delete from dbo.IdolCard where IdolId = @id";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
             SqlDataReader myReader;
@@ -144,6 +178,13 @@ namespace IdolCardAPI.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
+                    var p1 = myCommand.CreateParameter();
+                    p1.ParameterName = "@id";
+                    p1.Direction = ParameterDirection.Input;
+                    p1.DbType = DbType.String;
+                    p1.Value = id;
+
+                    myCommand.Parameters.Add(p1);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
 
