@@ -28,7 +28,7 @@ namespace IdolCardAPI.Controllers
         {
             string query = @"SELECT GroupId, GroupName from dbo.IdolGroup";
             DataTable table = new DataTable();
-            string sqlDataSource = @"Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = CardDb; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
+            string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
             SqlDataReader myReader;
 
             using(SqlConnection myCon = new SqlConnection(sqlDataSource))
@@ -52,7 +52,7 @@ namespace IdolCardAPI.Controllers
         {
             string query = @"insert into dbo.Department values ('" + ig.GroupName + @"')";
             DataTable table = new DataTable();
-            string sqlDataSource = @"Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = CardDb; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
+            string sqlDataSource = _configuration.GetConnectionString("IdolAppCon");
             SqlDataReader myReader;
 
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
