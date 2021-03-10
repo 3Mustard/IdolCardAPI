@@ -1,12 +1,14 @@
-﻿using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Web;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using System.Data;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 using IdolCardAPI.Models;
 
 
@@ -17,9 +19,11 @@ namespace IdolCardAPI.Controllers
     public class IdolCardController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public IdolCardController(IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+        public IdolCardController(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
+            _env = env;
         }
 
         [HttpGet]
@@ -201,12 +205,16 @@ namespace IdolCardAPI.Controllers
 
             return new JsonResult("Idol Group DELETE success!");
         }
-    }
 
-    [Route("SaveFile")]
-    [HttpPost]
-    public JsonResult SaveFile()
-    {
-        var file = Request.Form.Files[0];
+        [Route("SaveFile")]
+        [HttpPost]
+        public JsonResult SaveFile()
+        {
+            var httpRequest = Request.Form;
+            var postedFile = httpRequest.Files[0];
+            string filename = postedFile.FileName;
+            var physicalPath = _env.ContentRootPath + "/Photos/" + filename;
+        }
+
     }
 }
