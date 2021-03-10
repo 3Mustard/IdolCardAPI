@@ -228,9 +228,6 @@ namespace IdolCardAPI.Controllers
             {
                 return new JsonResult("catch block return");
             }
-
-
         }
-
     }
 }
