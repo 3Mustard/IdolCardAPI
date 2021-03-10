@@ -1,8 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Web;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using System.Data;
 using IdolCardAPI.Models;
+
 
 namespace IdolCardAPI.Controllers
 {
@@ -195,5 +201,12 @@ namespace IdolCardAPI.Controllers
 
             return new JsonResult("Idol Group DELETE success!");
         }
+    }
+
+    [Route("SaveFile")]
+    [HttpPost]
+    public JsonResult SaveFile()
+    {
+        var file = Request.Form.Files[0];
     }
 }
