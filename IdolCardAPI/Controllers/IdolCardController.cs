@@ -227,6 +227,7 @@ namespace IdolCardAPI.Controllers
         }
 
         [Route("GetAllGroupNames")]
+        [HttpGet]
         public JsonResult GetAllGroupNames()
         {
             string query = @"
